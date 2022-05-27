@@ -1,7 +1,7 @@
 #include "minivector.h"
 
 namespace mvec {
-	template <typename T>
+	template <class T>
 	vector<T>::vector() {
 		this->length = 0;
 		this->arr_size = 0; // sizeof(T);
@@ -9,12 +9,12 @@ namespace mvec {
 		this->freed = true;
 	}
 
-	template <typename T>
+	template <class T>
 	vector<T>::~vector() {
 		this->dealloc();
 	}
 
-	template <typename T>
+	template <class T>
 	bool vector<T>::push(T data, int index) {
 		if (this->freed) {
 			return false;
@@ -28,17 +28,18 @@ namespace mvec {
 		}
 	}
 
-	template <typename T>
+	template <class T>
 	unsigned int vector<T>::size() {
 		return this->arr_size;
 	}
 
-	template <typename T>
+	template <class T>
 	bool vector<T>::dealloc() {
 		if (this->freed) {
 			return true;
 		} else {
 			delete[] this->array;
+			return true;
 		}
 	}
 }
