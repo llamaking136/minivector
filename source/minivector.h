@@ -1,5 +1,9 @@
 #pragma once
 
+#if !defined(NULL)
+#define NULL (void*)0
+#endif
+
 namespace mvec {
 	template <class T>
 	class vector {
@@ -7,14 +11,15 @@ namespace mvec {
 		 vector();
 		~vector();
 
-		// bool push_back(T);
-		bool push(T, int);
+		bool push_back(T);
+		bool write(T, int);
 		// T pop_back();
-		// T pop(int);
+		// T remove(int);
 		unsigned int size();
+		unsigned int mem_used();
 		bool dealloc();
 
-		// T& operator[](int);
+		T& operator[](int);
 	private:
 		unsigned int length; // amount of data
 		unsigned int arr_size; // size of array in bytes
@@ -38,23 +43,57 @@ namespace mvec {
 	}
 
 	template <class T>
-	bool vector<T>::push(T data, int index) {
+	bool vector<T>::push_back(T data) {
 		if (this->freed) {
 			return false;
 		}
-		this->used_array = true;
-		
-		// if the index is outside the array boundary, we just push onto the end
-		if (index > this->length+1) {
-			index = this->length;
+
+		T* temp = new T[this->arr_size + sizeof(T)];
+		if (!temp) {
+			return false;
 		}
 
-		// add one more element to array
+		for (unsigned int i = 0; i < this->length; i++) {
+			temp[i] = this->array[i];
+		}
+		
+		this->arr_size += sizeof(T);
+		this->length++;
+		if (this->used_array) {
+			delete[] this->array;
+		}
+		this->array = temp;
+		this->array[this->length-1] = data;
 
+		this->used_array = true;
+
+		return true;
+	}
+
+	template <class T>
+	bool vector<T>::write(T data, int index) {
+		if (this->freed) {
+			return false;
+		}
+		
+		if (index > this->length || index < 0 || (index == 0 && !this->freed)) {
+			return false;
+		}
+
+		this->array[index] = data;
+
+		this->used_array = true;
+
+		return true;
 	}
 
 	template <class T>
 	unsigned int vector<T>::size() {
+		return this->length;
+	}
+
+	template <class T>
+	unsigned int vector<T>::mem_used() {
 		return this->arr_size;
 	}
 
@@ -64,7 +103,23 @@ namespace mvec {
 			return true;
 		} else {
 			delete[] this->array;
+			this->arr_size = 0;
 			return true;
 		}
+	}
+
+	template <class T>
+	T& vector<T>::operator[](int index) {
+		/*
+		if (this->freed) {
+			return &nullptr;
+		}
+
+		if (index > this->length || index < 0) {
+			return &nullptr;
+		}
+		*/
+
+		return this->array[index];
 	}
 }
