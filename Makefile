@@ -25,9 +25,8 @@ $(BUILD_PATH)/%.o: $(CXXFILES)
 
 $(OUTPUT): $(OBJFILES)
 	@$(DIR_GUARD)
-	@echo "AR $(OUTPUT)"
-	@#$(CXX) $(OBJFILES) $(SANITIZER) -o $(OUTPUT)
-	@ar ru $(OUTPUT) $(OBJFILES)
+	@echo "SO $(OUTPUT)"
+	@$(CXX) -shared $(OBJFILES) $(SANITIZER) -o $(OUTPUT)
 
 test: $(TESTFILE) $(OUTPUT)
 	@echo "TEST $<"
