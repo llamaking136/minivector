@@ -8,8 +8,7 @@ OBJFILES := $(patsubst $(PROJECT_DIR)/%.cpp, $(BUILD_PATH)/%.o, $(CXXFILES))
 OUTPUT := libminivector.so
 
 SANITIZER := \
-	-fsanitize=address \
-	-fsanitize=undefined 
+	-fsanitize=address
 
 CXX = clang++
 
@@ -28,9 +27,9 @@ $(OUTPUT): $(OBJFILES)
 	@echo "SO $(OUTPUT)"
 	@$(CXX) -shared $(OBJFILES) $(SANITIZER) -o $(OUTPUT)
 
-test: $(TESTFILE) $(OUTPUT)
+test: $(TESTFILE)
 	@echo "TEST $<"
-	@$(CXX) $(SANITIZER) $(OUTPUT) $(TESTFILE)
+	@$(CXX) $(SANITIZER) -Isource -g $(TESTFILE)
 	@./a.out
 
 clean: 
