@@ -8,7 +8,9 @@ int main() {
 	ree.push_back(2);
 	ree.push_back(3);
 	ree.print();
+	std::cout << ree.mem_used() << '\n';
 	std::cout << *ree.pop_back() << '\n';
 	ree.print();
+	std::cout << ree.mem_used() << '\n';
 	return 0;
 }
