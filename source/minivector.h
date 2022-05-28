@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 
+#define MINIVEC_VERSION "1.0.0"
+
 namespace mvec {
 	template <class T>
 	class vector {
@@ -18,7 +20,7 @@ namespace mvec {
 
 		void print();
 
-		T& operator[](int);
+		T* operator[](int);
 	private:
 		unsigned int length; // amount of data
 		unsigned int arr_size; // size of array in bytes
@@ -165,17 +167,15 @@ namespace mvec {
 	}
 
 	template <class T>
-	T& vector<T>::operator[](int index) {
-		/*
+	T* vector<T>::operator[](int index) {
 		if (this->freed) {
-			return &nullptr;
+			return nullptr;
 		}
 
 		if (index > this->length || index < 0) {
-			return &nullptr;
+			return nullptr;
 		}
-		*/
 
-		return this->array[index];
+		return &this->array[index];
 	}
 }
